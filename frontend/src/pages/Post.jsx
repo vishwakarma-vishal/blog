@@ -1,5 +1,6 @@
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { MdOutlineInsertComment } from "react-icons/md";
+import { Sidebar } from "../components/sidebar/Sidebar";
 
 const Post = () => {
     return (
@@ -29,49 +30,7 @@ const Post = () => {
                 </div>
             </div>
 
-            <div className="basis-1/3 space-y-4 py-4">
-                <h2 className="text-2xl text-center text-gray-800">Recent Post</h2>
-                <div>
-                    <div className="flex items-center gap-2 bg-white py-2 px-2 rounded-full shadow">
-                        <img src="./src/assets/placeholder.jpg" alt="thumbnail" className="w-12 h-12 rounded-full" />
-                        <div><p className="text-md font-semibold">This is the new post </p>
-                            <p className="text-sm text-gray-500">Lorem ipsum dolor sit, adipisicing...</p>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div className="flex items-center gap-2 bg-white py-2 px-2 rounded-full shadow">
-                        <img src="./src/assets/placeholder.jpg" alt="thumbnail" className="w-12 h-12 rounded-full" />
-                        <div><p className="text-md font-semibold">This is the new post </p>
-                            <p className="text-sm text-gray-500">Lorem ipsum dolor sit, adipisicing...</p>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div className="flex items-center gap-2 bg-white py-2 px-2 rounded-full shadow">
-                        <img src="./src/assets/placeholder.jpg" alt="thumbnail" className="w-12 h-12 rounded-full" />
-                        <div><p className="text-md font-semibold">This is the new post </p>
-                            <p className="text-sm text-gray-500">Lorem ipsum dolor sit, adipisicing...</p>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div className="flex items-center gap-2 bg-white py-2 px-2 rounded-full shadow">
-                        <img src="./src/assets/placeholder.jpg" alt="thumbnail" className="w-12 h-12 rounded-full" />
-                        <div><p className="text-md font-semibold">This is the new post </p>
-                            <p className="text-sm text-gray-500">Lorem ipsum dolor sit, adipisicing...</p>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div className="flex items-center gap-2 bg-white py-2 px-2 rounded-full shadow">
-                        <img src="./src/assets/placeholder.jpg" alt="thumbnail" className="w-12 h-12 rounded-full" />
-                        <div><p className="text-md font-semibold">This is the new post </p>
-                            <p className="text-sm text-gray-500">Lorem ipsum dolor sit, adipisicing...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Sidebar/>
         </div>
     )
 }

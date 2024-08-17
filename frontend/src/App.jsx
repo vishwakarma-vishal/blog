@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Post from "./pages/Post";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import CreatePost from "./pages/CreatePost";
 import Footer from "./components/Footer";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/post" element={<Post />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/create" element={<CreatePost />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

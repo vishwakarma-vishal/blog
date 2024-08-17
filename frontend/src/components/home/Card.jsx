@@ -1,8 +1,12 @@
 import { FaRegComment } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Card = () => {
+    const navigate = useNavigate();
     return (
-        <div className="bg-white rounded-lg shadow-lg cursor-pointer">
+        <div 
+        className="bg-white rounded-lg shadow-lg cursor-pointer"
+        onClick={()=>navigate('/post')}>
             <div className="w-full overflow-hidden rounded-t-md ">
                 <img src="/src/assets/placeholder.jpg" alt="placeholder" className="transition-all duration-700 hover:scale-125" />
             </div>

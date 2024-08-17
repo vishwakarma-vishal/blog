@@ -1,8 +1,12 @@
+import { BiError } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 const NotFound = () => {
     return (
-        <div>
-            The page is not exist.
+        <div className="flex flex-col justify-center items-center">
+            <BiError className="w-[40vw] h-[40vh] text-red-400"/>
+            <p className="-mt-4 text-3xl text-gray-900">Opps! The page not found.</p>
+           <button className="mt-4 bg-green-500 text-white font-semibold py-2 px-4 rounded-full"><Link to="/">Back to home</Link></button>
         </div>
     )
 }
