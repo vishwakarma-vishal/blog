@@ -3,7 +3,7 @@ import { useState } from "react";
 import { IoPersonSharp } from "react-icons/io5";
 
 const Header = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     return (
         <header className="w-full bg-gray-900 text-white px-8 py-4 flex justify-between items-center">

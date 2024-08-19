@@ -1,0 +1,40 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
+
+# Dependency directories
+jspm_packages/
+
+# Build output
+dist/
+build/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Coverage reports
+coverage/
+
+# NPM debug log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional: Ignore compiled TypeScript files (if you're using TypeScript)
+*.tsbuildinfo
+
+# Optional: Ignore runtime-generated files
+*.pid
+*.seed
+*.pid.lock
