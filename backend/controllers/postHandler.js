@@ -52,7 +52,7 @@ exports.createPostHandler = async (req, res) => {
     const { title, description, author } = req.body;
 
     try {
-        const newPost = await Post.create({title, description, author});
+        const newPost = await Post.create({ title, description, author });
 
         res.status(200).json({
             success: true,
@@ -63,6 +63,61 @@ exports.createPostHandler = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Internal server error',
+            error: error.message
+        });
+    }
+};
+
+// Update a post by id
+exports.updatePostHandler = async (req, res) => {
+    const { id } = req.params;
+    const updates = req.body;
+
+    try {
+        const updatedPost = await Post.findByIdAndUpdate(id, updates, { new: true });
+
+        if (!updatedPost) {
+            return res.status(404).json({
+                success: false,
+                message: 'Post not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: updatedPost
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+};
+
+// Delete a post by ID
+exports.deletePostHandler = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedPost = await Post.findByIdAndDelete(id);
+
+        if (!deletedPost) {
+            return res.status(404).json({
+                success: false,
+                message: 'Post not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Post deleted successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error', 
             error: error.message
         });
     }
