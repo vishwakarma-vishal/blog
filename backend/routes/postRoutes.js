@@ -6,7 +6,7 @@ const {getAllPostsHandler, getPostHandler, createPostHandler, updatePostHandler,
 Router.get('/posts', getAllPostsHandler);
 Router.get('/posts/:id', getPostHandler);
 Router.post('/posts/create', createPostHandler);
-Router.put('/posts/:id', updatePostHandler);
+Router.put('/posts/update/:id', updatePostHandler);
 Router.delete('/posts/:id', deletePostHandler);
 
 module.exports = Router;

@@ -19,22 +19,30 @@ exports.signup = async (req, res) => {
 
         // secure hashed
         let hashedPassword;
-        try{
+        try {
             hashedPassword = await bcrypt.hash(password, 10);
-        }catch(e){
-            return  res.status(500).json({
+        } catch (e) {
+            return res.status(500).json({
                 success: false,
                 message: "Error is hashing password",
             });
         }
 
         // Create a new user
-        const newUser = await User.create({ firstName, lastName, email, password:hashedPassword });
+        const newUser = await User.create({ firstName, lastName, email, password: hashedPassword });
+
+        newUser.password = "";
 
         if (newUser) {
             res.status(201).json({
                 success: true,
                 message: "User created successfully.",
+                user: {
+                    firstName: newUser.firstName,
+                    lastName: newUser.lastName,
+                    email: newUser.email,
+                    id: newUser._id
+                }
             });
         } else {
             res.status(500).json({
@@ -72,45 +80,60 @@ exports.login = async (req, res) => {
             });
         }
 
-        // password check
-        if (await bcrypt.compare(password, existingUser.password)) {
-            // Generate JWT token
-            const payload = {
-                email: existingUser.email,
-                id: existingUser._id,
-            }
-
-            const token = jwt.sign(
-                payload,
-                process.env.JWT_SECRET,
-                { expiresIn: '1h' }
-            );
-
-            // Sending the response with json token
-             return res.status(200).json({
-                success: true,
-                message: "Login successful",
-                data: { token },
-            });
-        }
-
-        else {
+        // Password check
+        const isMatch = await bcrypt.compare(password, existingUser.password);
+        if (!isMatch) {
             return res.status(401).json({
                 success: false,
                 message: 'Invalid password.',
             });
         }
-    }
 
-    catch (e) {
+        // Generate JWT token
+        const payload = {
+            email: existingUser.email,
+            id: existingUser._id,
+        };
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+        let user = existingUser.toObject();
+        user.token = token;
+        user.password = "";
+
+        // Sending the response with json token
+        return res.status(200).json({
+            success: true,
+            message: "Login successful",
+            user// Include token in the response
+        });
+    } catch (e) {
         res.status(500).json({
             success: false,
             message: "Something went wrong",
             error: e.message,
-        })
+        });
     }
-}
+};
 
-const editProfile = (req, res) => {
+exports.getUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findById(userId).populate('posts');
 
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        res.status(200).json({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            posts: user.posts
+        });
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
 }

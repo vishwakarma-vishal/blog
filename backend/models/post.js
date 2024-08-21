@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const PostSchema = new mongoose.Schema({
+    thumbnailUrl:{
+        type: String,
+        required: true,
+    },
     title: {
         type: String,
         required: true,
@@ -10,6 +14,10 @@ const PostSchema = new mongoose.Schema({
         required: true,
     },
     author: {
+        type: String,
+        required: true,
+    },
+    category: {
         type: String,
         required: true,
     },
