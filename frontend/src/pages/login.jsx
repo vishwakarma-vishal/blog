@@ -8,6 +8,7 @@ const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // Initialize form data
     const [formdata, setFormdata] = useState({
         email: "",
         password: "",
@@ -37,10 +38,8 @@ const Login = () => {
             });
 
             const data = await response.json();
-            console.log("response data->", data);
 
             if (response.ok) {
-                // Dispatch login action with user data
                 dispatch(login({ isLoggedIn: true, user: data.user }));
                 toast.success("Login successful");
                 navigate('/profile');
@@ -90,6 +89,7 @@ const Login = () => {
                         type="password"
                         id="password"
                         name="password"
+                        minLength={5}
                         placeholder="Enter your password"
                         className="border p-2 rounded text-sm outline-none w-full"
                         value={formdata.password}

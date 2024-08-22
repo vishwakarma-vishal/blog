@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { IoPersonSharp } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../store/userSlice"; // Assuming you have an action creator for logout
+import { logout } from "../store/userSlice"; 
 
 const Header = () => {
+    // Get the value from the userSlice
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const dispatch = useDispatch();
 

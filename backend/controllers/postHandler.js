@@ -1,10 +1,10 @@
 const Post = require('../models/Post');
+const User = require('../models/user');
 const path = require('path');
 const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
-const User = require('../models/user');
 
-// get all the posts
+// Get all the posts
 exports.getAllPostsHandler = async (req, res) => {
     try {
         const posts = await Post.find({});
@@ -12,19 +12,19 @@ exports.getAllPostsHandler = async (req, res) => {
         // send the response
         res.status(200).json({
             success: true,
-            message: "All the posts are fetchecd successfully",
+            message: "All the posts are fetched successfully",
             data: posts,
         });
     } catch (e) {
         res.status(500).json({
-            success: true,
+            success: false,
             message: "An error occured",
             error: e.message,
         });
     }
 }
 
-// get one post with id
+// Get one post with id
 exports.getPostHandler = async (req, res) => {
     const { id } = req.params;
     try {
@@ -34,7 +34,8 @@ exports.getPostHandler = async (req, res) => {
         if (!post) {
             return res.status(404).json({
                 success: false,
-                message: 'Post not found'
+                message: 'Post not found',
+                error: error.message
             });
         }
 

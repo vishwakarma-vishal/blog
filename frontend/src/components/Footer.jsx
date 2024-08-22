@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 
-
 const Footer = () => {
     return (
         <div className="w-full bg-gray-800 text-white px-8 py-4 ">

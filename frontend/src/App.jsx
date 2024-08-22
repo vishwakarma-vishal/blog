@@ -1,4 +1,3 @@
-// src/App.js
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import Header from "./components/Header";
@@ -7,13 +6,13 @@ import Signup from "./pages/Signup";
 import Login from './pages/Login';
 import Post from "./pages/Post";
 import NotFound from "./pages/NotFound";
+
 import UpdatePost from "./pages/UpdatePost";
 import Profile from "./pages/Profile";
 import CreatePost from "./pages/CreatePost";
 import Footer from "./components/Footer";
 
 const App = () => {
-  // Use useSelector to access the Redux store
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   return (
@@ -29,9 +28,9 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
 
           {/* Protected Routes */}
+          <Route path="/create" element={isLoggedIn ? <CreatePost /> : <Navigate to="/login" />} />
           <Route path="/post/update/:postId" element={isLoggedIn ? <UpdatePost /> : <Navigate to="/login" />} />
           <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} />
-          <Route path="/create" element={isLoggedIn ? <CreatePost /> : <Navigate to="/login" />} />
         </Routes>
       </main>
 

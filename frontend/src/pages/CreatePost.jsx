@@ -9,6 +9,7 @@ const CreatePost = () => {
     const user = useSelector((state) => state.user.user);
     console.log('User:', user);
 
+    // Initialize post data
     const [postdata, setPostdata] = useState({
         title: "",
         description: "",
@@ -22,10 +23,9 @@ const CreatePost = () => {
     const [filePreview, setFilePreview] = useState("");
 
     const navigate = useNavigate();
-    const dispatch = useDispatch(); // Initialize useDispatch
-    const userId = useSelector((state) => state.user.user?._id); // Get the user's ID from the store
+    const dispatch = useDispatch();
+    const userId = useSelector((state) => state.user.user?._id);
 
-    
     useEffect(() => {
         console.log(postdata);
     }, [postdata]);
@@ -71,7 +71,7 @@ const CreatePost = () => {
         try {
             const response = await fetch(`${import.meta.env.VITE_URL}/posts/create`, {
                 method: 'POST',
-                body: formData, // Use FormData as the body
+                body: formData,
             });
 
             const data = await response.json();
@@ -79,7 +79,7 @@ const CreatePost = () => {
 
             if (response.ok) {
                 toast.success("New post created");
-                // Fetch the updated user data
+              
                 console.log("userId", userId)
                 if (userId) {
                     console.log("inside our get user stat fun->");
@@ -191,6 +191,7 @@ const CreatePost = () => {
                         name="description"
                         placeholder='Write your post...'
                         className='w-full h-[30vh] border p-2 outline-none rounded'
+                        minLength={1000}
                         value={postdata.description}
                         onChange={handleChange}
                         required

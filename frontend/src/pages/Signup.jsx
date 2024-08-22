@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/userSlice";
 
 const Signup = () => {
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -15,14 +16,19 @@ const Signup = () => {
         email: "",
         password: ""
     });
-
     const [confirmPass, setConfirmPass] = useState("");
     const [warningMessage, setWarningMessage] = useState("");
+
+    // display warning if user is not logged in
+    useEffect(() => {
+        if (!isLoggedIn) {
+            toast.warning("Sign up first, to create a post.");
+        }
+    }, []);
 
     // Handle changes for form inputs
     const handleChange = (event) => {
         const { name, value } = event.target;
-
         if (name === "confirmPass") {
             setConfirmPass(value);
 
@@ -66,7 +72,6 @@ const Signup = () => {
             });
 
             const data = await response.json();
-            console.log('Signup response:', data);
 
             if (response.ok) {
                 dispatch(login({ isLoggedIn: true, user: data.user }));
@@ -101,6 +106,7 @@ const Signup = () => {
                                 type="text"
                                 id="firstname"
                                 name="firstName"
+                                minLength={3}
                                 placeholder="Enter your first name"
                                 className="border p-2 rounded text-sm outline-none w-full"
                                 value={formdata.firstName}
@@ -118,6 +124,7 @@ const Signup = () => {
                                 type="text"
                                 id="lastname"
                                 name="lastName"
+                                minLength={3}
                                 placeholder="Enter your last name"
                                 className="border p-2 rounded text-sm outline-none w-full"
                                 value={formdata.lastName}
@@ -156,6 +163,7 @@ const Signup = () => {
                                 type="password"
                                 id="pass"
                                 name="password"
+                                minLength={5}
                                 placeholder="Enter your password"
                                 className="border p-2 rounded text-sm outline-none w-full"
                                 value={formdata.password}
@@ -192,7 +200,9 @@ const Signup = () => {
                             Login here
                         </Link>
                     </p>
-                    <button type="submit" className="inline-block w-full p-2 rounded text-white bg-green-500 hover:bg-green-600">
+                    <button
+                        type="submit"
+                        className="inline-block w-full p-2 rounded text-white bg-green-500 hover:bg-green-600">
                         Create account
                     </button>
                 </form>

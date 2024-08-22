@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const User = require("../models/user");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -17,7 +16,7 @@ exports.signup = async (req, res) => {
             });
         }
 
-        // secure hashed
+        // secure password
         let hashedPassword;
         try {
             hashedPassword = await bcrypt.hash(password, 10);
@@ -34,7 +33,7 @@ exports.signup = async (req, res) => {
         newUser.password = "";
 
         if (newUser) {
-            res.status(201).json({
+            res.status(200).json({
                 success: true,
                 message: "User created successfully.",
                 user: {
@@ -104,7 +103,7 @@ exports.login = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Login successful",
-            user// Include token in the response
+            user
         });
     } catch (e) {
         res.status(500).json({

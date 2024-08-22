@@ -7,28 +7,32 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser } from '../store/userSlice'; 
+import { setUser } from '../store/userSlice';
 
 const Post = () => {
     const user = useSelector((state) => state.user.user);
-    console.log("user->",user)
 
     const navigate = useNavigate();
     const { postId } = useParams();
     const [post, setPost] = useState({});
-    const dispatch = useDispatch(); // Initialize useDispatch
+    const dispatch = useDispatch();
     const userId = user?._id;
-    console.log(userId);
 
+    //get post data
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(`${import.meta.env.VITE_URL}/posts/${postId}`);
-                const data = await response.json();
-                setPost(data.data);
-                console.log("response->", data.data);
+                const result = await response.json();
+
+                if (result.data == undefined) navigate("/");
+                setPost(result.data);
             } catch (error) {
-                console.log("Something went wrong", error);
+                if (error.response && error.response.status === 404) {
+                    console.error('Post not found (404)');
+                } else {
+                    console.error('Something went wrong', error.message);
+                }
             }
         };
 
@@ -41,7 +45,6 @@ const Post = () => {
             className = "space-x-2 text-sm text-white";
         }
     }
-
 
     //handle post delete
     const handleDelete = async () => {
@@ -66,7 +69,7 @@ const Post = () => {
                         const userResponse = await fetch(`${import.meta.env.VITE_URL}/users/${userId}`);
                         console.log(userResponse);
                         const updatedUserData = await userResponse.json();
-    
+
                         // Dispatch the setUser action to update the user state
                         dispatch(setUser({ user: updatedUserData }));
                     }
