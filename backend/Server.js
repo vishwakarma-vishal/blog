@@ -7,12 +7,15 @@ const app = express(); //intialize app
 
 // middleware
 app.use(express.json());
-dotenv.config(); // to access enviorment variables
+dotenv.config();
 app.use(cors());
-app.use(fileUpload()); // to get file upload functionlity
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/' 
+}));
 
 // Serve static files from the 'thumbnails' directory
-app.use('/thumbnails', express.static(path.join(__dirname, 'thumbnails')));
+app.use('/files', express.static(path.join(__dirname, './controllers/files')));
 
 // start the server
 const PORT = process.env.PORT;
@@ -23,10 +26,6 @@ app.listen(PORT, () =>
 //database connection
 const dbConnect = require('./config/database');
 dbConnect();
-
-//media server connection
-const { configureCloudinary } = require("./config/cloudinary");
-configureCloudinary();
 
 //routes
 const userRoutes = require("./routes/userRoutes");

@@ -3,7 +3,7 @@ import placeholderImg from "../../assets/placeholder.jpg";
 import { useNavigate } from 'react-router-dom';
 
 export const MiniCard = ({ post }) => {
-    const thumbnailUrl = post.thumbnailUrl;
+    const thumbnailUrl = `${import.meta.env.VITE_URL}${post.thumbnailUrl}`;
     const navigate = useNavigate();
 
     return (

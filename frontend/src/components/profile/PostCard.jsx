@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from "react-redux";
+import {useDispatch } from "react-redux";
 import { setUser } from '../../store/userSlice'; 
 
 export const PostCard = ({ post }) => {
@@ -50,7 +50,7 @@ export const PostCard = ({ post }) => {
         <div
             className="flex items-center gap-2 bg-white py-2 px-2 rounded-full shadow cursor-pointer"
             onClick={() => navigate(`/post/${post._id}`)}>
-            <img src={post.thumbnailUrl} alt="thumbnail" className="w-12 h-12 rounded-full" />
+            <img src={`${import.meta.env.VITE_URL}${post.thumbnailUrl}`} alt="thumbnail" className="w-12 h-12 rounded-full" />
             <div>
                 <p className="text-md font-semibold">{post.title}</p>
                 <p className="text-sm text-gray-500">{post.description.slice(0, 50)}</p>

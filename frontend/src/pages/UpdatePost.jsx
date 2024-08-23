@@ -2,12 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IoCloudUploadOutline, IoCheckmarkCircleOutline } from "react-icons/io5";
-import { useSelector } from 'react-redux';
 
 const UpdatePost = () => {
-    const user = useSelector((state) => state.user.user);
     const { postId } = useParams();
     const navigate = useNavigate();
+
+    // blog categories
+    const blogCategories = [
+        "All",
+        "Technology",
+        "Health & Wellness",
+        "Finance",
+        "Travel",
+        "Lifestyle",
+        "Food & Recipes",
+        "Fashion",
+        "Personal Development",
+        "Business",
+        "Entertainment"
+    ];
 
     const [post, setPost] = useState({
         title: "",
@@ -20,22 +33,22 @@ const UpdatePost = () => {
     const [file, setFile] = useState(null);
     const [filePreview, setFilePreview] = useState("");
 
-
+    // Load current post data
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(`${import.meta.env.VITE_URL}/posts/${postId}`);
                 const result = await response.json();
                 const data = result.data;
-                console.log(data);
+
                 setPost({
                     title: data.title,
                     description: data.description,
                     category: data.category,
                     author: data.author,
-                    thumbnailUrl: data.thumbnailUrl // assuming thumbnail is part of post data
+                    thumbnailUrl: data.thumbnailUrl
                 });
-                setFilePreview(`${data.thumbnailUrl}`); // Load existing thumbnail
+                setFilePreview(`${import.meta.env.VITE_URL}${data.thumbnailUrl}`);
             } catch (error) {
                 console.log("Something went wrong", error);
             }
@@ -59,6 +72,7 @@ const UpdatePost = () => {
         }
     };
 
+    // update the input values
     const handleChange = (event) => {
         const { name, value } = event.target;
 
@@ -68,12 +82,13 @@ const UpdatePost = () => {
         }));
     };
 
+    // submite the form
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         const formData = new FormData();
         if (file) {
-            formData.append('thumbnail', file); // Append the file only if a new one is selected
+            formData.append('thumbnail', file); 
         }
         formData.append('title', post.title);
         formData.append('description', post.description);
@@ -91,6 +106,7 @@ const UpdatePost = () => {
                 navigate(-1);
             } else {
                 toast.error(`${data.message}`);
+                console.log(data);
             }
 
         } catch (error) {
@@ -113,7 +129,7 @@ const UpdatePost = () => {
                         Thumbnail
                     </label><br />
                     <div
-                        className={`relative w-full bg-transparent border-2 
+                        className={`relative w-full bg-transparent border-2 h-60
                         ${filePreview ? 'border-green-500' : 'border-dashed'} 
                         rounded flex flex-col items-center justify-center gap-2 p-10 text-gray-600 hover:text-gray-700`}>
                         <input
@@ -124,7 +140,7 @@ const UpdatePost = () => {
                             onChange={handleFileChange}
                         />
                         {filePreview ? (
-                            <img src={filePreview} alt="File preview" className='w-60 h-60 object-cover mb-2 rounded' />
+                            <img src={filePreview} alt="File preview" className='w-40 h-40 object-cover mb-2 rounded' />
                         ) : (
                             <IoCloudUploadOutline className='inline-block text-6xl' />
                         )}
@@ -149,16 +165,16 @@ const UpdatePost = () => {
                     <select
                         id="category"
                         name="category"
-                        className='w-full border p-2 outline-none rounded'
-                        value={post.category}
+                        className="w-full border p-2 outline-none rounded"
+                        value={post.category || "All"}
                         onChange={handleChange}
                         required
                     >
-                        <option value="education">Education</option>
-                        <option value="entertainment">Entertainment</option>
-                        <option value="fitness">Fitness</option>
-                        <option value="lifestyle">Lifestyle</option>
-                        <option value="finance">Finance</option>
+                        {blogCategories.map((blogCategory, index) => (
+                            <option key={index} value={blogCategory}>
+                                {blogCategory}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div className='space-y-1'>

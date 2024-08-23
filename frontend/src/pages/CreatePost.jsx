@@ -6,18 +6,31 @@ import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch an
 import { setUser } from '../store/userSlice'; // Import the setUser action
 
 const CreatePost = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const user = useSelector((state) => state.user.user);
-    console.log('User:', user);
+
+    // blog categories
+    const blogCategories = [
+        "All",
+        "Technology",
+        "Health & Wellness",
+        "Finance",
+        "Travel",
+        "Lifestyle",
+        "Food & Recipes",
+        "Fashion",
+        "Personal Development",
+        "Business",
+        "Entertainment"
+    ];
 
     // Initialize post data
     const [postdata, setPostdata] = useState({
         title: "",
         description: "",
-        category: "",
+        category: "All",
         author: `${user.firstName} ${user.lastName}`
     });
-
-    console.log(postdata.author);
 
     const [file, setFile] = useState(null);
     const [filePreview, setFilePreview] = useState("");
@@ -25,10 +38,6 @@ const CreatePost = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const userId = useSelector((state) => state.user.user?._id);
-
-    useEffect(() => {
-        console.log(postdata);
-    }, [postdata]);
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
@@ -55,18 +64,16 @@ const CreatePost = () => {
     };
 
     const handleSubmit = async (event) => {
-        console.log("Creating the post");
         event.preventDefault();
+        setIsSubmitting(true);
 
         const formData = new FormData();
-        formData.append('thumbnail', file); // Append the file
-        formData.append('title', postdata.title); // Append the title
-        formData.append('description', postdata.description); // Append the description
-        formData.append('category', postdata.category); // Append the category
-        formData.append('author', postdata.author); // Append the author
+        formData.append('thumbnail', file);
+        formData.append('title', postdata.title);
+        formData.append('description', postdata.description);
+        formData.append('category', postdata.category);
+        formData.append('author', postdata.author);
         formData.append('userId', user._id);
-
-        console.log("formData", formData);
 
         try {
             const response = await fetch(`${import.meta.env.VITE_URL}/posts/create`, {
@@ -75,18 +82,13 @@ const CreatePost = () => {
             });
 
             const data = await response.json();
-            console.log(data);
 
             if (response.ok) {
                 toast.success("New post created");
-              
-                console.log("userId", userId)
-                if (userId) {
-                    console.log("inside our get user stat fun->");
-                    const userResponse = await fetch(`${import.meta.env.VITE_URL}/users/${userId}`);
-                    console.log(userResponse);
-                    const updatedUserData = await userResponse.json();
 
+                if (userId) {
+                    const userResponse = await fetch(`${import.meta.env.VITE_URL}/users/${userId}`);
+                    const updatedUserData = await userResponse.json();
                     // Dispatch the setUser action to update the user state
                     dispatch(setUser({ user: updatedUserData }));
                 }
@@ -98,6 +100,9 @@ const CreatePost = () => {
         } catch (error) {
             toast.error("Something went wrong, try again later");
             console.error("Error while creating a post:", error);
+        }
+        finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -115,9 +120,9 @@ const CreatePost = () => {
                         Thumbnail
                     </label><br />
                     <div
-                        className={`relative w-full bg-transparent border-2 
+                        className={`relative w-full bg-transparent border-2 h-60
                     ${filePreview ? 'border-green-500' : 'border-dashed'} 
-                    rounded flex flex-col items-center justify-center gap-2 p-10 text-gray-600 hover:text-gray-700`}>
+                    rounded flex flex-col items-center justify-center gap-2 p-4 text-gray-600 hover:text-gray-700`}>
                         <input
                             id="thumbnail"
                             type="file"
@@ -127,7 +132,7 @@ const CreatePost = () => {
                             required
                         />
                         {filePreview ? (
-                            <img src={filePreview} alt="File preview" className='w-60 h-60 object-cover mb-2 rounded' />
+                            <img src={filePreview} alt="File preview" className='w-40 h-40 object-cover mb-2 rounded' />
                         ) : (
                             <IoCloudUploadOutline className='inline-block text-6xl' />
                         )}
@@ -151,16 +156,16 @@ const CreatePost = () => {
                     <select
                         id="category"
                         name="category"
-                        className='w-full border p-2 outline-none rounded'
-                        value={postdata.category}
+                        className="w-full border p-2 outline-none rounded"
+                        value={postdata.category || "All"}
                         onChange={handleChange}
                         required
                     >
-                        <option value="education">Education</option>
-                        <option value="entertainment">Entertainment</option>
-                        <option value="fitness">Fitness</option>
-                        <option value="lifestyle">Lifestyle</option>
-                        <option value="finance">Finance</option>
+                        {blogCategories.map((blogCategory, index) => (
+                            <option key={index} value={blogCategory}>
+                                {blogCategory}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div className='space-y-1'>
@@ -173,6 +178,7 @@ const CreatePost = () => {
                         id="title"
                         type="text"
                         name="title"
+                        minLength={10}
                         placeholder="Enter post title"
                         className='w-full border p-2 outline-none rounded'
                         value={postdata.title}
@@ -199,9 +205,15 @@ const CreatePost = () => {
                 </div>
                 <button
                     type='submit'
-                    className='bg-green-500 text-white font-semibold px-4 py-2 rounded-full'>
-                    Create post
+                    className={`bg-green-500 text-white font-semibold px-4 py-2 rounded-full ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? 'Submitting...' : 'Create Post'}
                 </button>
+
+                {isSubmitting && (
+                    <div className="loader mt-2">Processing...</div>
+                )}
             </form>
         </div>
     );

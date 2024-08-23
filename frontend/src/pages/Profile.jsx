@@ -15,6 +15,7 @@ const Profile = () => {
                 const response = await fetch(`${import.meta.env.VITE_URL}/users/${user._id}`);
                 const data = await response.json();
                 setPosts(data.posts);
+
                 console.log("response->", data.posts);
             } catch (error) {
                 console.log("Something went wrong", error);
@@ -24,9 +25,11 @@ const Profile = () => {
         fetchData();
     }, []);
 
+    console.log(posts.length);
+
     return (
         <div>
-            <div className="flex justify-between items-start">
+            <div className="bg-white p-4 rounded-lg shadow-lg flex justify-between items-center">
                 {/* <img src="" alt="profile" className="w-20 h-20" /> */}
                 <div className="flex flex-col items-center">
                     <IoPersonSharp className="w-28 h-28 pt-5 border-2 rounded-full" />
@@ -34,18 +37,26 @@ const Profile = () => {
                     <p className="text-sm font-semibold">Email: <span className="font-normal">{user.email}</span></p>
                 </div>
 
-                <div>
-                    <button className="w-fit text-sm font-semibold py-2 px-4 bg-green-500 text-white rounded-full">Update profile</button>
+                <div className="flex">
+                    <div className="flex flex-col items-center mr-10">
+                        <span className="inline-block text-xl font-bold text-gray-900">Wishlist</span>
+                        <span className="inline-block text-6xl font-bold text-green-500">{posts.length}</span>
+                    </div>
+
+                    <div className="flex flex-col items-center mr-10">
+                        <span className="inline-block text-xl font-bold text-gray-900">Total Post</span>
+                        <span className="inline-block text-6xl font-bold text-green-500">{posts.length}</span>
+                    </div>
                 </div>
             </div>
 
             <div className="w-full space-y-4 py-4">
-                <h2 className="text-2xl text-gray-800">Your Posts</h2>
+                <h2 className="text-2xl text-gray-800 font-semibold text-gray-800">Your Posts</h2>
 
-                {posts && posts.map((post)=>{
-                    return <PostCard key={post._id} post={post}/>
+                {posts && posts.map((post) => {
+                    return <PostCard key={post._id} post={post} />
                 })}
-               
+
             </div>
         </div>
     )

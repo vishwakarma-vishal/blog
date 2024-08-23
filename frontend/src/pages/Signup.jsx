@@ -22,7 +22,7 @@ const Signup = () => {
     // display warning if user is not logged in
     useEffect(() => {
         if (!isLoggedIn) {
-            toast.warning("Sign up first, to create a post.");
+            toast.info("Sign up first, to create a post.");
         }
     }, []);
 

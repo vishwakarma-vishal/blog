@@ -5,7 +5,7 @@ import { TbCategory } from "react-icons/tb";
 import placeholderImg from "../../assets/placeholder.jpg"
 
 const Card = ({ post }) => {
-    const thumbnailUrl = post.thumbnailUrl;
+    const thumbnailUrl = `${import.meta.env.VITE_URL}${post.thumbnailUrl}`;
     const title = post.title;
     const description = post.description.slice(0, 70);
     const author = post.author;

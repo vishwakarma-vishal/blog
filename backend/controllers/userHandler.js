@@ -1,6 +1,5 @@
 const User = require("../models/user");
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 exports.signup = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
@@ -71,7 +70,7 @@ exports.login = async (req, res) => {
         }
 
         // Check if the user is registered or not
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email }).populate('posts');
         if (!existingUser) {
             return res.status(401).json({
                 success: false,
@@ -88,18 +87,10 @@ exports.login = async (req, res) => {
             });
         }
 
-        // Generate JWT token
-        const payload = {
-            email: existingUser.email,
-            id: existingUser._id,
-        };
-
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
         let user = existingUser.toObject();
-        user.token = token;
         user.password = "";
 
-        // Sending the response with json token
+        // Sending the response
         return res.status(200).json({
             success: true,
             message: "Login successful",
@@ -125,12 +116,12 @@ exports.getUser = async (req, res) => {
             });
         }
 
-        res.status(200).json({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            posts: user.posts
-        });
+        user.password = "";
+        user.token = "";
+
+        res.status(200).json(
+            user
+        );
     } catch (error) {
         console.error('Error fetching user:', error);
         res.status(500).json({ message: 'Server error' });

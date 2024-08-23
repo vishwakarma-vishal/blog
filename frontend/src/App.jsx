@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import Header from "./components/Header";
 import Home from "./pages/Home";
+import SearchPage from "./pages/SearchPage";
 import Signup from "./pages/Signup";
 import Login from './pages/Login';
 import Post from "./pages/Post";
@@ -15,13 +17,33 @@ import Footer from "./components/Footer";
 const App = () => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // fetch all the posts
+  useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const response = await fetch(`${import.meta.env.VITE_URL}/posts`);
+              const result = await response.json();
+              setPosts(result.data);
+              setLoading(false);
+          } catch (error) {
+              console.log("Something went wrong", error);
+          }
+      };
+
+      fetchData();
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col justify-between">
-      <Header />
+      <Header posts={posts} />
 
       <main className="p-4 sm:p-8">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home posts={posts} loading={loading}/>} />
+          <Route path="/search" element={<SearchPage posts={posts} />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/post/:postId" element={<Post />} />
