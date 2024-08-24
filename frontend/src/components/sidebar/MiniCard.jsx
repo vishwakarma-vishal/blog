@@ -8,7 +8,7 @@ export const MiniCard = ({ post }) => {
 
     return (
         <div
-            className="flex items-center gap-2 bg-white py-2 px-2 rounded-full bg-gray-100 hover:bg-gray-200 cursor-pointer hover:shadow"
+            className="flex items-center gap-2 border border-bottom p-2 rounded-full cursor-pointer hover:shadow-lg transition-all duration-400"
             onClick={() => navigate(`/post/${post._id}`)}>
             <img
                 src={thumbnailUrl ? thumbnailUrl : placeholderImg}
@@ -20,7 +20,6 @@ export const MiniCard = ({ post }) => {
             />
             <div>
                 <p className="text-md font-semibold">{post.title}</p>
-                <p className="text-sm text-gray-500">{post.description.slice(0, 30)}...</p>
             </div>
         </div>
     )

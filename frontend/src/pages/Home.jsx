@@ -8,7 +8,7 @@ const Home = ({posts,loading}) => {
         <div className="flex justify-center">
             {loading ?
                 <Loader /> :
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
                     {posts.map((post) => (
                         <Card key={post._id} post={post} />
                     ))}

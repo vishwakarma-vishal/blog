@@ -29,18 +29,14 @@ exports.signup = async (req, res) => {
         // Create a new user
         const newUser = await User.create({ firstName, lastName, email, password: hashedPassword });
 
-        newUser.password = "";
+        let user = newUser.toObject();
+        user.password = "";
 
         if (newUser) {
             res.status(200).json({
                 success: true,
                 message: "User created successfully.",
-                user: {
-                    firstName: newUser.firstName,
-                    lastName: newUser.lastName,
-                    email: newUser.email,
-                    id: newUser._id
-                }
+                user
             });
         } else {
             res.status(500).json({
@@ -117,7 +113,6 @@ exports.getUser = async (req, res) => {
         }
 
         user.password = "";
-        user.token = "";
 
         res.status(200).json(
             user

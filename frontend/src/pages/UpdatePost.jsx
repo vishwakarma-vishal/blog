@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IoCloudUploadOutline, IoCheckmarkCircleOutline } from "react-icons/io5";
+import Icon from "../assets/writer.png";
 
 const UpdatePost = () => {
     const { postId } = useParams();
@@ -88,7 +89,7 @@ const UpdatePost = () => {
 
         const formData = new FormData();
         if (file) {
-            formData.append('thumbnail', file); 
+            formData.append('thumbnail', file);
         }
         formData.append('title', post.title);
         formData.append('description', post.description);
@@ -117,103 +118,131 @@ const UpdatePost = () => {
 
     return (
         <div>
-            <h1 className='text-2xl font-semibold text-gray-800 mb-4'>Update Post</h1>
+            <h1 className='text-xl sm:text-2xl font-semibold text-gray-800 my-4'>Update Post</h1>
 
-            <form
-                onSubmit={handleSubmit}
-                className='border bg-white p-6 space-y-4 border-none rounded shadow-lg'>
-                <div className='space-y-1'>
-                    <label
-                        htmlFor="thumbnail"
-                        className='text-md font-semibold text-gray-800'>
-                        Thumbnail
-                    </label><br />
-                    <div
-                        className={`relative w-full bg-transparent border-2 h-60
+            <div className='flex relative'>
+                <form
+                    onSubmit={handleSubmit}
+                    className='border bg-white p-6 space-y-4 border-none rounded shadow-lg w-full lg:w-8/12'>
+                    <div className='space-y-1'>
+                        <label
+                            htmlFor="thumbnail"
+                            className='text-md font-semibold text-gray-800'>
+                            Thumbnail
+                        </label><br />
+                        <div
+                            className={`relative w-full bg-transparent border-2 h-60
                         ${filePreview ? 'border-green-500' : 'border-dashed'} 
                         rounded flex flex-col items-center justify-center gap-2 p-10 text-gray-600 hover:text-gray-700`}>
-                        <input
-                            id="thumbnail"
-                            type="file"
-                            name="file"
-                            className='absolute w-full h-full opacity-0 cursor-pointer'
-                            onChange={handleFileChange}
-                        />
-                        {filePreview ? (
-                            <img src={filePreview} alt="File preview" className='w-40 h-40 object-cover mb-2 rounded' />
-                        ) : (
-                            <IoCloudUploadOutline className='inline-block text-6xl' />
-                        )}
-                        <span className='text-xs'>
-                            {filePreview ?
-                                <div className='text-green-500 space-x-1'>
-                                    <IoCheckmarkCircleOutline className='inline-block text-4xl' />
-                                    <span>File ready to upload</span>
-                                </div> :
-                                'Select to upload image'
-                            }
-                        </span>
+                            <input
+                                id="thumbnail"
+                                type="file"
+                                name="file"
+                                className='absolute w-full h-full opacity-0 cursor-pointer'
+                                onChange={handleFileChange}
+                            />
+                            {filePreview ? (
+                                <img src={filePreview} alt="File preview" className='w-40 h-40 object-cover mb-2 rounded' />
+                            ) : (
+                                <IoCloudUploadOutline className='inline-block text-6xl' />
+                            )}
+                            <span className='text-xs'>
+                                {filePreview ?
+                                    <div className='text-green-500 space-x-1'>
+                                        <IoCheckmarkCircleOutline className='inline-block text-4xl' />
+                                        <span>File ready to upload</span>
+                                    </div> :
+                                    'Select to upload image'
+                                }
+                            </span>
+                        </div>
                     </div>
-                </div>
 
-                <div className='space-y-1'>
-                    <label
-                        htmlFor="category"
-                        className='text-md font-semibold text-gray-800'>
-                        Category
-                    </label><br />
-                    <select
-                        id="category"
-                        name="category"
-                        className="w-full border p-2 outline-none rounded"
-                        value={post.category || "All"}
-                        onChange={handleChange}
-                        required
-                    >
-                        {blogCategories.map((blogCategory, index) => (
-                            <option key={index} value={blogCategory}>
-                                {blogCategory}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className='space-y-1'>
-                    <label
-                        htmlFor="title"
-                        className='text-md font-semibold text-gray-800'>
-                        Title
-                    </label><br />
-                    <input
-                        id="title"
-                        type="text"
-                        name="title"
-                        className='w-full border p-2 outline-none rounded'
-                        value={post.title}
-                        onChange={handleChange}
-                        required
+                    <div className='space-y-1'>
+                        <label
+                            htmlFor="category"
+                            className='text-md font-semibold text-gray-800'>
+                            Category
+                        </label><br />
+                        <select
+                            id="category"
+                            name="category"
+                            className="w-full border p-2 outline-none rounded"
+                            value={post.category || "All"}
+                            onChange={handleChange}
+                            required
+                        >
+                            {blogCategories.map((blogCategory, index) => (
+                                <option key={index} value={blogCategory}>
+                                    {blogCategory}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className='space-y-1'>
+                        <label
+                            htmlFor="title"
+                            className='text-md font-semibold text-gray-800'>
+                            Title
+                        </label><br />
+                        <input
+                            id="title"
+                            type="text"
+                            name="title"
+                            className='w-full border p-2 outline-none rounded'
+                            value={post.title}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className='space-y-1'>
+                        <label
+                            htmlFor="description"
+                            className='text-md font-semibold text-gray-800'>
+                            Description
+                        </label><br />
+                        <textarea
+                            id="description"
+                            name="description"
+                            className='w-full h-[30vh] border p-2 outline-none rounded'
+                            value={post.description}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <button
+                        type='submit'
+                        className='bg-green-500 text-white font-semibold px-4 py-2 rounded-full'>
+                        Update Post
+                    </button>
+                </form>
+
+                {/* Inspiration Sidebar */}
+                <div className="hidden lg:flex h-screen sticky top-0 w-4/12 p-6 bg-gray-100 text-gray-800  flex-col justify-center items-center rounded shadow-lg ml-4 bg-white">
+                    <h2 className="text-xl font-bold mb-4">Get Inspired</h2>
+
+                    <p className="italic text-lg mb-6 text-center">
+                        "Creativity is intelligence having fun."
+                    </p>
+
+                    <p className="text-base mb-6 text-center">
+                        Every word you write has the potential to ignite change. Let your creativity shine through.
+                    </p>
+
+                    {/* 3D Icon */}
+                    <img
+                        src={Icon}
+                        alt="3D Icon"
+                        className="rounded-lg shadow-md mb-6 w-32 h-32"
                     />
+
+                    <ul className="text-sm list-disc list-inside space-y-2">
+                        <li>Write with authenticity and passion.</li>
+                        <li>Let your ideas flow without self-doubt.</li>
+                        <li>Your words can inspire others—make them count.</li>
+                    </ul>
                 </div>
-                <div className='space-y-1'>
-                    <label
-                        htmlFor="description"
-                        className='text-md font-semibold text-gray-800'>
-                        Description
-                    </label><br />
-                    <textarea
-                        id="description"
-                        name="description"
-                        className='w-full h-[30vh] border p-2 outline-none rounded'
-                        value={post.description}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button
-                    type='submit'
-                    className='bg-green-500 text-white font-semibold px-4 py-2 rounded-full'>
-                    Update Post
-                </button>
-            </form>
+            </div>
         </div>
     );
 };

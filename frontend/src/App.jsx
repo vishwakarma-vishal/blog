@@ -21,38 +21,37 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   // fetch all the posts
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_URL}/posts`);
+      const result = await response.json();
+      setPosts(result.data);
+      setLoading(false);
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
+  };
   useEffect(() => {
-      const fetchData = async () => {
-          try {
-              const response = await fetch(`${import.meta.env.VITE_URL}/posts`);
-              const result = await response.json();
-              setPosts(result.data);
-              setLoading(false);
-          } catch (error) {
-              console.log("Something went wrong", error);
-          }
-      };
-
-      fetchData();
+    fetchData();
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
-      <Header posts={posts} />
+    <div className="relative min-h-screen flex flex-col justify-between">
+      <Header posts={posts}/>
 
-      <main className="p-4 sm:p-8">
+      <main className="p-2 sm:p-4 md:p-6 lg:p-8">
         <Routes>
-          <Route path="/" element={<Home posts={posts} loading={loading}/>} />
+          <Route path="/" element={<Home posts={posts} loading={loading} />} />
           <Route path="/search" element={<SearchPage posts={posts} />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/post/:postId" element={<Post />} />
+          <Route path="/post/:postId" element={<Post fetchAllPost={fetchData} />} />
           <Route path="*" element={<NotFound />} />
 
           {/* Protected Routes */}
-          <Route path="/create" element={isLoggedIn ? <CreatePost /> : <Navigate to="/login" />} />
+          <Route path="/create" element={isLoggedIn ? <CreatePost fetchData={fetchData}/> : <Navigate to="/login" />} />
           <Route path="/post/update/:postId" element={isLoggedIn ? <UpdatePost /> : <Navigate to="/login" />} />
-          <Route path="/profile" element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} />
+          <Route path="/profile" element={isLoggedIn ? <Profile fetchAllPost={fetchData} /> : <Navigate to="/login" />} />
         </Routes>
       </main>
 

@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUser } from '../store/userSlice';
 import ConfirmDialog from '../components/post/ConfirmDialog';
 
-const Post = () => {
+const Post = ({fetchAllPost}) => {
     const user = useSelector((state) => state.user.user);
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -71,6 +71,7 @@ const Post = () => {
                         const updatedUserData = await userResponse.json();
                         // Dispatch the setUser action to update the user state
                         dispatch(setUser({ user: updatedUserData }));
+                        fetchAllPost();
                     }
                     navigate(-1);
                 } else {
@@ -95,9 +96,8 @@ const Post = () => {
     useEffect(() => {
         if (post && post.author) {
             setCommentdata({
-                author: post.author,
-                comment: "",
-                user:"566",
+                author: `${user?.firstName} ${user?.lastName}`,
+                comment: ""
             });
         }
     }, [post]);
@@ -120,7 +120,7 @@ const Post = () => {
             }
         } catch (error) {
             toast.error("Error:", error)
-            ("something went wrong", error);
+                ("something went wrong", error);
         }
     }
 
@@ -128,16 +128,18 @@ const Post = () => {
         <div className="flex gap-6">
             <div className="space-y-4 w-full lg:w-2/3 bg-white p-4 rounded shadow-xl">
                 <div>
-                    <img src={`${import.meta.env.VITE_URL}${post.thumbnailUrl}`} alt="hero" className="w-full h-[450px] rounded " />
+                    <img src={`${import.meta.env.VITE_URL}${post.thumbnailUrl}`} alt="hero" className="w-full max-h-[450px] rounded " />
                 </div>
 
                 <div className="space-y-2">
                     <div className="flex justify-between">
-                        <div className="flex gap-3 text-md text-gray-600">
+                        <div className="flex flex-wrap gap-3 sm:gap-2 text-md text-gray-600">
                             <span className="flex items-center gap-1"><FaRegPenToSquare />{post.author}</span>
                             <span className="flex items-center gap-1"><TbCategory />{post.category}</span>
-                            <span className="flex items-center gap-[1px]"><MdOutlineInsertComment /> 13</span>
+                            <span className="flex items-center gap-[1px]"><MdOutlineInsertComment />{post.comments?.length || 0}</span>
                         </div>
+
+                        {/* action for author only - (update, delete) */}
                         <div className={className}>
                             <button
                                 className="bg-green-600 hover:bg-green-700 py-1 px-4 rounded-full"
@@ -157,26 +159,29 @@ const Post = () => {
                                 message="Are you sure you want to delete the post?"
                             />
                         </div>
+
                     </div>
 
-                    <h2 className="text-3xl font-semibold text-gray-800">{post.title}</h2>
-                    <p className="text-md whitespace-pre-wrap">{post.description}</p>
+                    <h2 className="text-2xl md:text-2xl lg:text-3xl font-semibold text-gray-800">{post.title}</h2>
+                    <p className="text-md whitespace-pre-wrap text-justify">{post.description}</p>
                 </div>
 
                 {/* comment section */}
                 <div className="w-full border-2 rounded p-4 space-y-2">
                     <h2 className="text-gray-800 font-semibold">Comments</h2>
 
-                    <div className="h-40 rounded p-2 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-slate-300 overflow-y-scroll shadow-inner">
+                    <div className="max-h-40 rounded p-2 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-slate-300 overflow-y-scroll shadow-inner">
                         {
-                            post.comments?.map((comment) => {
-                                return (
-                                    <div className="flex flex-col text-sm border-b pb-2">
-                                        <span >{comment.author}</span>
-                                        <span className="text-xs">{comment.comment}</span>
-                                    </div>
-                                )
-                            })
+                            post.comments?.length >0 ?
+                                post.comments?.map((comment, index) => {
+                                    return (
+                                        <div key={index} className="flex flex-col text-sm border-b pb-2">
+                                            <span >{comment.author}</span>
+                                            <span className="text-xs">{comment.comment}</span>
+                                        </div>
+                                    )
+                                }) :
+                                <span className="text-sm text-gray-600">Be the first one to comment.</span>
                         }
                     </div>
                     <p className="text-sm font-semibold pt-2">Leave a comment</p>
@@ -199,7 +204,7 @@ const Post = () => {
                     {!user && <p className="text-red-500 text-xs">You must be logged in to post a comment.</p>}
                 </div>
             </div>
-            <div className="hidden w-1/3 lg:block">
+            <div className="relative hidden w-1/3 lg:block">
                 < Sidebar />
             </div>
         </div>
