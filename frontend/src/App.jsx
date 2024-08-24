@@ -5,7 +5,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import SearchPage from "./pages/SearchPage";
 import Signup from "./pages/Signup";
-import Login from './pages/Login';
+import Login from "./pages/Login";
 import Post from "./pages/Post";
 import NotFound from "./pages/NotFound";
 
