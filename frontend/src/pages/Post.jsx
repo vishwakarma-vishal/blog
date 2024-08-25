@@ -125,6 +125,8 @@ const Post = ({fetchAllPost}) => {
         }
     }
 
+    console.log("Post->", post);
+    
     return (
         <div className="flex gap-6">
             <div className="space-y-4 w-full lg:w-2/3 bg-white p-4 rounded shadow-xl">
