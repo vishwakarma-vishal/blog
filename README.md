@@ -1,4 +1,5 @@
 # StoryNetwork
+![image](https://github.com/user-attachments/assets/183a933b-d442-4f73-b84c-ba04c6f19058)
 
 ## Objective
 
@@ -84,7 +85,7 @@ To run this project locally:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/[vishwakarma-vishal/blog].git
+   git clone https://github.com/vishwakarma-vishal/blog.git
    ```
 
 2. **Navigate to the project directory:**
