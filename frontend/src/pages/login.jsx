@@ -71,7 +71,7 @@ const Login = () => {
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="Enter your email address"
+                        placeholder="Enter your email"
                         className="border p-2 rounded text-sm w-full outline-none"
                         value={formdata.email}
                         onChange={handleChange}
