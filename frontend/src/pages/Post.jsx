@@ -28,6 +28,7 @@ const Post = ({fetchAllPost}) => {
 
             if (result.data == undefined) navigate("/");
             setPost(result.data);
+            console.log(result.data)
         } catch (error) {
             if (error.response && error.response.status === 404) {
                 console.error('Post not found (404)');
