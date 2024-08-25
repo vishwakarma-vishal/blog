@@ -11,10 +11,10 @@ const Card = ({ post }) => {
 
     const navigate = useNavigate();
     return (
-        <div className="max-h-72 bg-white rounded-lg shadow-lg cursor-pointer"
+        <div className="h-72 w-min sm:w-auto sm:max-h-72 bg-white rounded-lg shadow-lg cursor-pointer"
             onClick={() => navigate(`/post/${post._id}`)}>
 
-            <div className="h-[54%] w-full rounded-t-md overflow-hidden">
+            <div className="h-[54%] aspect-video w-full rounded-t-md overflow-hidden">
                 <img
                     src={thumbnailUrl ? thumbnailUrl : placeholderImg}
                     alt="placeholder"
